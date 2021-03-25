@@ -223,6 +223,7 @@ void setup() {
   setTime(12, 6, 0, 11, 3, 2021);
   lcd.begin(16, 2); // 16 columns, 2 rows
   setNextBus();
+  update();
   pinMode(MAIN_BUTTON_PIN, INPUT);
   pinMode(GREEN_LED_PIN, OUTPUT);
   pinMode(YELLOW_LED_PIN, OUTPUT);
@@ -337,8 +338,6 @@ void setNextBus() {
       break;
     }
   }
-
-  update();
 }
 
 // Return true if the given bus is the next
@@ -359,12 +358,10 @@ int getMinuteOfTheDay() {
 
 // Global update, every minute
 void update() {
+  setNextBus();
+
   if (nextBus) {
-    if (getWaitingTime(nextBus) >= 0) {
-      printTimes();
-    } else {
-      setNextBus();
-    }
+    printTimes();
   } else {
     digitalWrite(GREEN_LED_PIN, LOW);
     digitalWrite(YELLOW_LED_PIN, LOW);
